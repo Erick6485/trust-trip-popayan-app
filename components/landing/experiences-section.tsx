@@ -20,7 +20,7 @@ const experiences = [
   },
   {
     id: 2,
-    title: "Ruta de los sabores caucanos — gastronomía auténtica",
+    title: "Congreso Gastronómico de Popayán — gastronomía auténtica",
     author: { name: "Andrea K.", country: "DE", flag: "🇩🇪" },
     category: "Gastronomía",
     image: "/images/rest-tradicional.png",
@@ -31,7 +31,7 @@ const experiences = [
   },
   {
     id: 3,
-    title: "Trekking por las montañas del Cauca — naturaleza sin igual",
+    title: "Senderismo en el cerro de las tres cruces — naturaleza sin igual",
     author: { name: "Carlos M.", country: "CO", flag: "🇨🇴" },
     category: "Naturaleza",
     image: "/images/naturaleza.png",
