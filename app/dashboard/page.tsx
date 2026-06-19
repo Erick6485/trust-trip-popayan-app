@@ -810,7 +810,7 @@ export default function DashboardPage() {
                 Análisis predictivo y recomendaciones de política pública
               </h2>
               <p className="text-muted-foreground text-sm mt-1 max-w-2xl text-pretty">
-                Generado automáticamente por el modelo de IA de TrustTrip a partir del análisis de
+                Generado automáticamente por el modelo de IA de Travesía Blanca a partir del análisis de
                 48,320 visitas, 2,418 experiencias y datos históricos del sector.
               </p>
             </div>

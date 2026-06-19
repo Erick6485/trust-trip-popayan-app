@@ -11,7 +11,7 @@ const testimonials = [
     flag: "🇨🇴",
     type: "Familia",
     quote:
-      "TrustTrip nos ayudó a planificar el viaje perfecto en familia. El índice de confianza nos dio seguridad para elegir los mejores lugares.",
+      "Travesía Blanca nos ayudó a planificar el viaje perfecto en familia. El índice de confianza nos dio seguridad para elegir los mejores lugares.",
     score: 98,
     trip: "4 días en Popayán",
     verified: true,

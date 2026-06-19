@@ -5,7 +5,6 @@ import { FeaturedPlaces } from "@/components/landing/featured-places"
 import { ExperiencesSection } from "@/components/landing/experiences-section"
 import { Testimonials } from "@/components/landing/testimonials"
 import Link from "next/link"
-import { Shield } from "lucide-react"
 
 export default function HomePage() {
   return (
@@ -23,10 +22,14 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
-              <div className="grid size-8 place-items-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/30">
-                <Shield className="size-4" />
+              <div className="grid size-8 place-items-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/30 overflow-hidden">
+                <img 
+                  src="/images/LOGO_TRAVESIA_BLANCA.png" 
+                  alt="Escudo de Popayán" 
+                  className="object-contain w-full h-full"
+                />
               </div>
-              <span className="font-heading font-bold text-foreground">TrustTrip Popayán</span>
+              <span className="font-heading font-bold text-foreground">Travesía Blanca</span>
             </div>
             <nav className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
               {[
@@ -42,7 +45,7 @@ export default function HomePage() {
               ))}
             </nav>
             <p className="text-xs text-muted-foreground">
-              © 2024 TrustTrip Popayán. Hecho con IA en Colombia.
+              © 2024 Travesía Blanca. Hecho con IA en Colombia.
             </p>
           </div>
         </div>
