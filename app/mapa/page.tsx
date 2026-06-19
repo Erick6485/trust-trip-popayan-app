@@ -514,7 +514,7 @@ export default function MapaPage() {
               className="absolute z-10 pointer-events-none text-white font-heading font-bold text-3xl opacity-40"
               style={{ left: "50%", top: "45%", transform: "translate(-50%,-50%)" }}
             >
-              Popayán
+              
             </div>
 
             {/* Map footer info */}
