@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'TrustTrip Popayán — Experiencias turísticas verificadas con IA',
+  title: 'Travesía Blanca — Experiencias turísticas verificadas con IA',
   description:
     'Planifica tu viaje a Popayán con inteligencia artificial. Descubre experiencias verificadas, lugares con alto índice de confianza y rutas personalizadas en La Ciudad Blanca de Colombia.',
   keywords: ['Popayán', 'turismo', 'Colombia', 'Cauca', 'viaje', 'experiencias', 'IA'],

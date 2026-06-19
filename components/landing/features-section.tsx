@@ -38,7 +38,7 @@ export function FeaturesSection() {
             La plataforma de turismo inteligente
           </h2>
           <p className="text-muted-foreground mt-3 max-w-2xl mx-auto text-pretty">
-            TrustTrip no es un directorio turístico. Es una plataforma de inteligencia turística
+            Travesía Blanca no es un directorio turístico. Es una plataforma de inteligencia turística
             que conecta visitantes y proveedores de Popayán mediante IA.
           </p>
         </div>

@@ -27,14 +27,18 @@ export function Navigation() {
       {/* Desktop Header */}
       <header className="hidden md:block fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-6xl glass-strong rounded-2xl border border-border shadow-xl shadow-primary/10">
         <div className="flex items-center justify-between px-6 h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="size-8 rounded-lg bg-primary/15 text-primary ring-1 ring-primary/30 flex items-center justify-center transition-transform group-hover:scale-105">
-              <Shield className="size-4" />
+          {/* Logo - Más grande pero sin afectar el header */}
+          <Link href="/" className="flex items-center gap-3 group shrink-0">
+            <div className="h-16 w-auto flex items-center justify-center transition-transform group-hover:scale-105 -my-2">
+              <img 
+                src="/images/LOGO_TRAVESIA_BLANCA.png" 
+                alt="Travesía Blanca" 
+                className="object-contain h-full w-auto"
+              />
             </div>
             <div className="flex flex-col">
               <span className="font-heading font-bold text-sm leading-none text-foreground tracking-tight">
-                TrustTrip
+                Travesía Blanca
               </span>
               <span className="text-[10px] text-gold font-medium mt-0.5 tracking-wider uppercase">
                 Popayán
@@ -42,8 +46,8 @@ export function Navigation() {
             </div>
           </Link>
 
-          {/* Nav items */}
-          <nav className="flex items-center gap-1.5">
+          {/* Nav items - Centered */}
+          <nav className="flex items-center gap-1 flex-1 justify-center">
             {navItems.map(({ href, label, icon: Icon, badge }) => {
               const active = pathname === href
               return (
@@ -51,7 +55,7 @@ export function Navigation() {
                   key={href}
                   href={href}
                   className={cn(
-                    "flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200",
+                    "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap",
                     active
                       ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
                       : "text-muted-foreground hover:bg-secondary hover:text-foreground"
@@ -70,16 +74,16 @@ export function Navigation() {
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0">
             <Link
               href="/actor"
-              className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors px-3 py-2 rounded-full"
+              className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors px-3 py-2 rounded-full"
             >
               Soy proveedor
             </Link>
             <Link
               href="/rutas"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-md shadow-primary/30 transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-md shadow-primary/30 transition-transform hover:scale-[1.02]"
             >
               <Sparkles className="size-3.5" />
               Planificar viaje
@@ -91,11 +95,15 @@ export function Navigation() {
       {/* Mobile Top Header (compact) */}
       <header className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 border-b border-border glass-strong flex items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="size-7 rounded-lg bg-primary/15 text-primary ring-1 ring-primary/30 flex items-center justify-center">
-            <Shield className="size-3.5" />
+          <div className="size-8 rounded-lg bg-primary/15 text-primary ring-1 ring-primary/30 flex items-center justify-center overflow-hidden">
+            <img 
+              src="/images/LOGO_TRAVESIA_BLANCA.png" 
+              alt="Travesía Blanca" 
+              className="object-contain w-full h-full"
+            />
           </div>
           <span className="font-heading font-bold text-sm text-foreground tracking-tight">
-            TrustTrip Popayán
+            Travesía Blanca
           </span>
         </Link>
         <div className="flex items-center gap-2">

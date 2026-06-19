@@ -46,7 +46,7 @@ const ambassadors = [
     category: "Turismo Religioso",
     title: "Semana Santa en Popayán: una experiencia que cambia la vida",
     content:
-      "Llevar tres años visitando Popayán durante Semana Santa me ha dado una perspectiva única. Los nazarenos en procesión, la música sacra que llena las calles coloniales, el aroma del incienso mezclado con el aire fresco andino... es algo que no se puede describir con palabras. Este año, con TrustTrip, pude planear cada detalle: los mejores miradores para ver las procesiones, los restaurantes que sirven la merienda tradicional y hasta los hoteles más cercanos al recorrido.",
+      "Llevar tres años visitando Popayán durante Semana Santa me ha dado una perspectiva única. Los nazarenos en procesión, la música sacra que llena las calles coloniales, el aroma del incienso mezclado con el aire fresco andino... es algo que no se puede describir con palabras. Este año, con Travesía Blanca, pude planear cada detalle: los mejores miradores para ver las procesiones, los restaurantes que sirven la merienda tradicional y hasta los hoteles más cercanos al recorrido.",
     highlights: ["Procesión del Lunes Santo", "Catedral Iluminada", "Gastronomía de Semana Santa"],
     images: ["/images/semana-santa.png", "/images/catedral-popayan.png"],
     likes: 234,
@@ -86,7 +86,7 @@ const ambassadors = [
     category: "Naturaleza & Aventura",
     title: "10 días de mochilero por Popayán y el Cauca profundo",
     content:
-      "Con $500K pesos colombianos logré una experiencia increíble. Popayán es el punto de partida perfecto para explorar el Cauca: el Parque Natural Puracé, las comunidades indígenas Nasa, las selvas del Pacífico y las termales de San Juan. TrustTrip me ayudó a encontrar los hospedajes más seguros y económicos.",
+      "Con $500K pesos colombianos logré una experiencia increíble. Popayán es el punto de partida perfecto para explorar el Cauca: el Parque Natural Puracé, las comunidades indígenas Nasa, las selvas del Pacífico y las termales de San Juan. Travesía Blanca me ayudó a encontrar los hospedajes más seguros y económicos.",
     highlights: ["Volcán Puracé", "Termas de Coconuco", "Comunidades Indígenas Nasa"],
     images: ["/images/naturaleza.png", "/images/popayan-hero.png"],
     likes: 156,
@@ -285,7 +285,7 @@ export default function ExperienciasPage() {
             <Card className="rounded-2xl glass p-1 transition-all duration-300 hover:border-primary/40">
               <CardContent className="p-5">
                 <h3 className="font-semibold text-sm text-foreground mb-4">
-                  Comunidad TrustTrip
+                  Comunidad Travesía Blanca
                 </h3>
                 {[
                   { value: "2,418", label: "Experiencias verificadas" },
