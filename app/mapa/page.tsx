@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import dynamic from "next/dynamic"
+import { useMemo, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
@@ -32,6 +33,8 @@ import {
   Info,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+
+const Plot = dynamic(() => import("react-plotly.js"), { ssr: false })
 
 /* ── Data ─────────────────────────────────────────────────── */
 
@@ -147,16 +150,255 @@ const mapPoints = [
     distance: "Centro",
     rating: 5.0,
   },
+  {
+    id: 11, name: "Museo Histórico Casa de Nariño", category: "culture", trust: 92,
+    x: 46, y: 30, visits: "7.5K", hours: "9am–5pm",
+    description: "Colecciones históricas que narran la formación de Popayán y su patrimonio colonial.",
+    image: "/images/catedral-popayan.png",
+    tags: ["Historia", "Museo", "Cultura"],
+    experiences: 110,
+    distance: "0.5 km",
+    rating: 4.7,
+  },
+  {
+    id: 12, name: "Iglesia de San Francisco", category: "religious", trust: 94,
+    x: 54, y: 40, visits: "6.8K", hours: "6am–7pm",
+    description: "Templo barroco del siglo XVII con obras de arte religiosas y un ambiente solemne.",
+    image: "/images/semana-santa.png",
+    tags: ["Iglesia", "Arte Religioso"],
+    experiences: 100,
+    distance: "0.6 km",
+    rating: 4.8,
+  },
+  {
+    id: 13, name: "Restaurante La Casona del Puente", category: "gastronomy", trust: 93,
+    x: 38, y: 56, visits: "9.9K", hours: "12pm–11pm",
+    description: "Cocina local con platos típicos y especialidades caucanas en ambiente colonial.",
+    image: "/images/rest-tradicional.png",
+    tags: ["Tradicional", "Sabor Local"],
+    experiences: 215,
+    distance: "0.8 km",
+    rating: 4.8,
+  },
+  {
+    id: 14, name: "Parque Natural Regional", category: "nature", trust: 90,
+    x: 22, y: 20, visits: "4.3K", hours: "5am–6pm",
+    description: "Senderos naturales, avistamiento de aves y jardines de especies nativas del Cauca.",
+    image: "/images/naturaleza.png",
+    tags: ["Aventura", "Ecoturismo"],
+    experiences: 135,
+    distance: "2.8 km",
+    rating: 4.8,
+  },
+  {
+    id: 15, name: "Posada San Agustín", category: "lodging", trust: 94,
+    x: 74, y: 44, visits: "2.7K", hours: "24h",
+    description: "Posada tradicional con habitaciones cómodas, patio central y desayuno regional.",
+    image: "/images/hotel-colonial.png",
+    tags: ["Acogedor", "Familiar"],
+    experiences: 76,
+    distance: "0.9 km",
+    rating: 4.6,
+  },
+  {
+    id: 16, name: "Festival de Teatro Popayán", category: "events", trust: 97,
+    x: 58, y: 58, visits: "11K", hours: "Según cartelera",
+    description: "Encuentro internacional de teatro con obras locales, danza y performance urbana.",
+    image: "/images/semana-santa.png",
+    tags: ["Arte", "Festival", "Cultura"],
+    experiences: 248,
+    distance: "1.0 km",
+    rating: 4.9,
+  },
+  {
+    id: 17, name: "Morro de Tulcán", category: "culture", trust: 96,
+    x: 30, y: 18, visits: "14K", hours: "6am–8pm",
+    description: "Pirámide prehispánica considerada una de las más importantes de Colombia. Ofrece una vista panorámica de Popayán y es uno de los símbolos históricos de la ciudad.",
+    image: "/images/morro-tulcan.png",
+    tags: ["Arqueología", "Mirador", "Patrimonio"],
+    experiences: 320,
+    distance: "1.3 km",
+    rating: 4.8,
+  },
+  {
+    id: 18, name: "Rincón Payanés", category: "culture", trust: 93,
+    x: 34, y: 24, visits: "8.5K", hours: "Siempre abierto",
+    description: "Espacio cultural con réplicas en miniatura de los monumentos más emblemáticos de Popayán y zonas para artesanías y gastronomía local.",
+    image: "/images/rincon-payanes.png",
+    tags: ["Cultural", "Miniaturas", "Tradición"],
+    experiences: 190,
+    distance: "1.1 km",
+    rating: 4.6,
+  },
+  {
+    id: 19, name: "Museo de Historia Natural", category: "culture", trust: 94,
+    x: 32, y: 28, visits: "5.4K", hours: "9am–5pm",
+    description: "Museo de la Universidad del Cauca con salas de arqueología, paleontología, zoología y biodiversidad del sur de Colombia.",
+    image: "/images/museo-natural.png",
+    tags: ["Museo", "Ciencia", "Educación"],
+    experiences: 140,
+    distance: "1.0 km",
+    rating: 4.7,
+  },
+  {
+    id: 20, name: "Museo Casa Mosquera", category: "culture", trust: 91,
+    x: 48, y: 34, visits: "3.8K", hours: "9am–5pm",
+    description: "Casa museo dedicada a Tomás Cipriano de Mosquera, con exposiciones históricas sobre la independencia y la vida republicana colombiana.",
+    image: "/images/museo-mosquera.png",
+    tags: ["Historia", "Museo", "Patrimonio"],
+    experiences: 110,
+    distance: "0.5 km",
+    rating: 4.6,
+  },
+  {
+    id: 21, name: "Torre del Reloj", category: "culture", trust: 92,
+    x: 52, y: 36, visits: "6.7K", hours: "Siempre abierto",
+    description: "Monumento emblemático del centro histórico de Popayán conocido como la nariz de la ciudad blanca.",
+    image: "/images/torre-reloj.png",
+    tags: ["Histórico", "Centro", "Fotografía"],
+    experiences: 170,
+    distance: "Centro",
+    rating: 4.7,
+  },
+  {
+    id: 22, name: "Iglesia de Belén", category: "religious", trust: 95,
+    x: 28, y: 16, visits: "7.2K", hours: "6am–7pm",
+    description: "Templo religioso ubicado en una colina que ofrece una de las mejores vistas panorámicas de Popayán.",
+    image: "/images/iglesia-belen.png",
+    tags: ["Mirador", "Religioso", "Colonial"],
+    experiences: 210,
+    distance: "1.8 km",
+    rating: 4.8,
+  },
+  {
+    id: 23, name: "Casa Museo Guillermo León Valencia", category: "culture", trust: 92,
+    x: 56, y: 34, visits: "3.5K", hours: "8am–5pm",
+    description: "Museo dedicado a la vida y obra del expresidente Guillermo León Valencia, con fotografías y objetos históricos.",
+    image: "/images/museo-guillermo-valencia.png",
+    tags: ["Historia", "Museo", "Presidencia"],
+    experiences: 90,
+    distance: "0.4 km",
+    rating: 4.6,
+  },
+  {
+    id: 24, name: "Parque El Quijote", category: "nature", trust: 87,
+    x: 62, y: 60, visits: "4.9K", hours: "Siempre abierto",
+    description: "Parque urbano ideal para caminatas, actividades familiares y descanso en zonas verdes.",
+    image: "/images/parque-quijote.png",
+    tags: ["Parque", "Familia", "Naturaleza"],
+    experiences: 120,
+    distance: "1.9 km",
+    rating: 4.5,
+  },
+  {
+    id: 25, name: "Cascada San Bernardino", category: "nature", trust: 89,
+    x: 18, y: 10, visits: "2.8K", hours: "7am–5pm",
+    description: "Atractivo natural cercano a Popayán con senderos ecológicos, piscinas naturales y espacios para fotografía.",
+    image: "/images/cascada-san-bernardino.png",
+    tags: ["Ecoturismo", "Cascada", "Senderismo"],
+    experiences: 95,
+    distance: "8.5 km",
+    rating: 4.7,
+  },
+  {
+    id: 26, name: "Café Tiuspa", category: "gastronomy", trust: 94,
+    x: 42, y: 42, visits: "7.1K", hours: "7am–8pm",
+    description: "Cafetería reconocida por ofrecer café especial cultivado en las montañas del Cauca y experiencias de catación para visitantes.",
+    image: "/images/cafe-tiuspa.png",
+    tags: ["Café Especial", "Cauca", "Tradicional"],
+    experiences: 185,
+    distance: "0.7 km",
+    rating: 4.8,
+  },
+  {
+    id: 27, name: "Carantanta Gourmet", category: "gastronomy", trust: 92,
+    x: 34, y: 50, visits: "6.3K", hours: "11am–10pm",
+    description: "Restaurante especializado en platos típicos caucanos con propuestas modernas basadas en la gastronomía tradicional de Popayán.",
+    image: "/images/carantanta-gourmet.png",
+    tags: ["Carantanta", "Pipián", "Tradicional"],
+    experiences: 162,
+    distance: "0.9 km",
+    rating: 4.7,
+  },
+  {
+    id: 28, name: "La Fonda Payanesa", category: "gastronomy", trust: 93,
+    x: 46, y: 58, visits: "8.8K", hours: "12pm–11pm",
+    description: "Espacio gastronómico donde los visitantes pueden degustar empanadas de pipián, tamales de pipián y bebidas tradicionales.",
+    image: "/images/fonda-payanesa.png",
+    tags: ["Típico", "Pipián", "Tradición"],
+    experiences: 214,
+    distance: "1.1 km",
+    rating: 4.8,
+  },
+  {
+    id: 29, name: "Casa Artesanal del Cauca", category: "crafts", trust: 95,
+    x: 68, y: 48, visits: "4.6K", hours: "8am–6pm",
+    description: "Centro de exposición y venta de productos elaborados por comunidades indígenas y artesanos del departamento del Cauca.",
+    image: "/images/casa-artesanal-cauca.png",
+    tags: ["Artesanía", "Indígena", "Cultura"],
+    experiences: 118,
+    distance: "0.8 km",
+    rating: 4.8,
+  },
+  {
+    id: 30, name: "Taller de Tejidos Misak", category: "crafts", trust: 96,
+    x: 72, y: 42, visits: "3.9K", hours: "9am–5pm",
+    description: "Espacio donde se elaboran tejidos tradicionales de la comunidad Misak utilizando técnicas ancestrales.",
+    image: "/images/tejidos-misak.png",
+    tags: ["Tejidos", "Misak", "Tradición"],
+    experiences: 96,
+    distance: "1.0 km",
+    rating: 4.9,
+  },
+  {
+    id: 31, name: "Galería Artesanal La Ermita", category: "crafts", trust: 91,
+    x: 60, y: 50, visits: "3.4K", hours: "9am–6pm",
+    description: "Galería dedicada a la comercialización de cerámica, talla en madera y joyería artesanal caucana.",
+    image: "/images/galeria-artesanal.png",
+    tags: ["Cerámica", "Madera", "Arte"],
+    experiences: 82,
+    distance: "0.7 km",
+    rating: 4.6,
+  },
+  {
+    id: 32, name: "Hotel Dann Monasterio", category: "lodging", trust: 98,
+    x: 70, y: 32, visits: "12K", hours: "24h",
+    description: "Hotel de lujo ubicado en un antiguo monasterio colonial restaurado. Uno de los hospedajes más emblemáticos de Popayán.",
+    image: "/images/hotel-monasterio.png",
+    tags: ["Lujo", "Colonial", "Histórico"],
+    experiences: 352,
+    distance: "Centro",
+    rating: 4.9,
+  },
+  {
+    id: 33, name: "Hotel La Plazuela", category: "lodging", trust: 95,
+    x: 76, y: 38, visits: "6.8K", hours: "24h",
+    description: "Hotel boutique ubicado en el centro histórico con arquitectura colonial y servicios orientados al turismo cultural.",
+    image: "/images/hotel-plazuela.png",
+    tags: ["Boutique", "Centro Histórico", "Colonial"],
+    experiences: 175,
+    distance: "0.4 km",
+    rating: 4.8,
+  },
+  {
+    id: 34, name: "Hostal Ciudad Blanca", category: "lodging", trust: 92,
+    x: 72, y: 52, visits: "4.5K", hours: "24h",
+    description: "Hospedaje económico para viajeros nacionales e internacionales con ambiente cultural y espacios compartidos.",
+    image: "/images/hostal-ciudad-blanca.png",
+    tags: ["Hostal", "Económico", "Turistas"],
+    experiences: 121,
+    distance: "1.0 km",
+    rating: 4.7,
+  },
 ]
 
-// Map category zone bubbles (positions for the visual bubbles on the map)
-const categoryBubbles = [
-  { id: "religious",  label: "Ruta Religiosa",    trust: 98, x: "50%",  y: "10%",  icon: Church,          color: "oklch(0.75 0.14 310)" },
-  { id: "gastronomy", label: "Gastronomía",        trust: 95, x: "20%",  y: "38%",  icon: UtensilsCrossed, color: "oklch(0.72 0.18 55)"  },
-  { id: "nature",     label: "Naturaleza",          trust: 92, x: "74%",  y: "28%",  icon: Mountain,        color: "oklch(0.65 0.17 150)" },
-  { id: "crafts",     label: "Artesanías",          trust: 89, x: "18%",  y: "60%",  icon: Palette,         color: "oklch(0.65 0.22 295)" },
-  { id: "lodging",    label: "Hospedaje",           trust: 93, x: "76%",  y: "56%",  icon: Bed,             color: "oklch(0.68 0.16 230)" },
-  { id: "culture",    label: "Cultura y Tradición", trust: 94, x: "52%",  y: "72%",  icon: Landmark,        color: "oklch(0.65 0.2 265)"  },
+const categoryZones = [
+  { id: "religious", label: "Ruta Religiosa", x: "50%", y: "12%", color: "#c084fc" },
+  { id: "gastronomy", label: "Gastronomía", x: "22%", y: "36%", color: "#f59e0b" },
+  { id: "nature", label: "Naturaleza", x: "74%", y: "28%", color: "#22c55e" },
+  { id: "crafts", label: "Artesanías", x: "18%", y: "58%", color: "#ec4899" },
+  { id: "lodging", label: "Hospedaje", x: "76%", y: "56%", color: "#38bdf8" },
+  { id: "culture", label: "Cultura", x: "52%", y: "72%", color: "#fb7185" },
 ]
 
 const nearbyExperiences = [
@@ -187,9 +429,37 @@ export default function MapaPage() {
   const [addedToRoute, setAddedToRoute] = useState<number[]>([])
   const [mapMode, setMapMode] = useState<"pins" | "heat">("pins")
 
-  const filtered = activeCategory === "all"
-    ? mapPoints
-    : mapPoints.filter((p) => p.category === activeCategory)
+  const filtered = useMemo(
+    () => activeCategory === "all"
+      ? mapPoints
+      : mapPoints.filter((p) => p.category === activeCategory),
+    [activeCategory]
+  )
+
+  const nearestSelection = useMemo((): { point: (typeof mapPoints)[0]; distanceKm: string } | null => {
+    if (!selectedPoint) return null
+
+    let nearest: (typeof mapPoints)[0] | null = null
+    let minDistance = Infinity
+
+    filtered.forEach((point) => {
+      if (point.id === selectedPoint.id) return
+      const dx = point.x - selectedPoint.x
+      const dy = point.y - selectedPoint.y
+      const distance = Math.sqrt(dx * dx + dy * dy)
+      if (distance < minDistance) {
+        minDistance = distance
+        nearest = point
+      }
+    })
+
+    return nearest
+      ? {
+          point: nearest,
+          distanceKm: Math.max(0.1, minDistance * 0.08).toFixed(1),
+        }
+      : null
+  }, [selectedPoint, filtered])
 
   const handleAdd = (id: number) => {
     setAddedToRoute((prev) =>
@@ -203,6 +473,149 @@ export default function MapaPage() {
 
   const getCategoryIcon = (catId: string) => {
     return categories.find((c) => c.id === catId)?.icon ?? MapPin
+  }
+
+  const categoryTrustScores = useMemo(() => {
+    const scores: Record<string, number> = {}
+    categories.forEach((cat) => {
+      const pointsInCategory = mapPoints.filter((p) => p.category === cat.id)
+      if (pointsInCategory.length > 0) {
+        const avgTrust = pointsInCategory.reduce((sum, p) => sum + p.trust, 0) / pointsInCategory.length
+        scores[cat.id] = Math.round(avgTrust)
+      }
+    })
+    return scores
+  }, [])
+
+  const displayedExperiences = useMemo(() => {
+    let results = filtered
+    
+    // Smart recommendation: combine distance, trust, and popularity
+    results = [...results].sort((a, b) => {
+      const distA = parseInt(a.distance) || 999
+      const distB = parseInt(b.distance) || 999
+      const trustDiff = b.trust - a.trust // Higher trust first
+      const visitsDiff = (parseInt(b.visits) || 0) - (parseInt(a.visits) || 0) // More visits first
+      const distDiff = distA - distB // Closer first
+      
+      // Combined scoring: trust (40%) + visits (30%) + distance (30%)
+      const scoreA = (a.trust / 100) * 0.4 + ((parseInt(a.visits) || 0) / 10000) * 0.3 - (distA / 100) * 0.3
+      const scoreB = (b.trust / 100) * 0.4 + ((parseInt(b.visits) || 0) / 10000) * 0.3 - (distB / 100) * 0.3
+      
+      return scoreB - scoreA
+    })
+    
+    return results.slice(0, 8) // Show max 8 experiences
+  }, [filtered])
+
+  const similarExperiences = useMemo(() => {
+    if (!selectedPoint) return []
+    
+    // Find experiences in the same category, exclude current selection, sort by trust + distance
+    return mapPoints
+      .filter((p) => p.category === selectedPoint.category && p.id !== selectedPoint.id)
+      .sort((a, b) => {
+        const distA = parseInt(a.distance) || 999
+        const distB = parseInt(b.distance) || 999
+        const scoreA = (a.trust / 100) * 0.6 - (distA / 100) * 0.4
+        const scoreB = (b.trust / 100) * 0.6 - (distB / 100) * 0.4
+        return scoreB - scoreA
+      })
+      .slice(0, 3)
+  }, [selectedPoint])
+
+  const plotData = useMemo(() => {
+    const colorMap = categories.reduce<Record<string, string>>((acc, category) => {
+      acc[category.id] = category.color
+      return acc
+    }, {})
+
+    return [
+      {
+        x: filtered.map((point) => point.x),
+        y: filtered.map((point) => 100 - point.y),
+        type: "scatter",
+        mode: "markers",
+        customdata: filtered.map((point) => point.id),
+        text: filtered.map((point) => point.name),
+        hovertemplate: "%{text}<br>%{customdata}<extra></extra>",
+        marker: {
+          size: filtered.map((point) =>
+            selectedPoint?.id === point.id
+              ? 26
+              : nearestSelection?.point.id === point.id
+              ? 20
+              : 14
+          ),
+          color: filtered.map((point) =>
+            selectedPoint?.id === point.id
+              ? "#ffd166"
+              : nearestSelection?.point.id === point.id
+              ? "#38bdf8"
+              : colorMap[point.category] ?? "#94a3b8"
+          ),
+          opacity: 0.85,
+          line: {
+            width: filtered.map((point) =>
+              selectedPoint?.id === point.id || nearestSelection?.point.id === point.id ? 2 : 0
+            ),
+            color: "transparent",
+          },
+        },
+      },
+    ]
+  }, [filtered, selectedPoint, nearestSelection])
+
+  const plotLayout = useMemo(
+    () => ({
+      margin: { l: 0, r: 0, t: 0, b: 0 },
+      hovermode: "closest",
+      paper_bgcolor: "transparent",
+      plot_bgcolor: "transparent",
+      xaxis: {
+        visible: false,
+        range: [0, 100],
+        fixedrange: true,
+      },
+      yaxis: {
+        visible: false,
+        range: [0, 100],
+        fixedrange: true,
+        scaleanchor: "x",
+      },
+      annotations: [
+        {
+          text: "Mapa interactivo de experiencias en Popayán",
+          xref: "paper",
+          yref: "paper",
+          x: 0.02,
+          y: 1.05,
+          showarrow: false,
+          font: { size: 14, color: "#f8fafc" },
+          align: "left",
+        },
+      ],
+      showlegend: false,
+    }),
+    []
+  )
+
+  const plotConfig = useMemo(
+    () => ({
+      responsive: true,
+      displayModeBar: false,
+      scrollZoom: false,
+    }),
+    []
+  )
+
+  const handleMapClick = (event: any) => {
+    const pointId = event?.points?.[0]?.customdata
+    if (!pointId) return
+    const point = mapPoints.find((item) => item.id === pointId)
+    if (point) {
+      setSelectedPoint(point)
+    }
   }
 
   return (
@@ -336,18 +749,17 @@ export default function MapaPage() {
           {/* Category filter bar — STATIC, no overflow */}
           <div className="shrink-0 border-b border-border/10 bg-background/80 backdrop-blur-md z-30">
             <div className="flex items-center gap-1.5 px-3 py-2.5 overflow-x-auto no-scrollbar">
-              {categories.map(({ id, label, icon: Icon }) => (
+              {categories.map(({ id, label }) => (
                 <button
                   key={id}
                   onClick={() => setActiveCategory(id)}
                   className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shrink-0",
+                    "px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shrink-0",
                     activeCategory === id
                       ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
                       : "text-muted-foreground hover:bg-secondary hover:text-foreground border border-border/20"
                   )}
                 >
-                  <Icon className="size-3.5" />
                   {label}
                 </button>
               ))}
@@ -377,147 +789,66 @@ export default function MapaPage() {
 
           {/* Map container — fills remaining height */}
           <div className="flex-1 relative overflow-hidden">
-            {/* Background image */}
-            <Image
-              src="/images/mapa-popayan.png"
-              alt="Mapa ilustrado de Popayán"
-              fill
-              className="object-cover"
-              priority
-            />
+            <div className="absolute inset-0">
+              <Image
+                src="/images/mapa-popayan.png"
+                alt="Mapa ilustrado de Popayán"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-slate-950/25 pointer-events-none" />
+            </div>
 
-            {/* Dark overlay with aurora */}
-            <div className="absolute inset-0 bg-background/55 city-aurora pointer-events-none" />
+            {/* Interactive Plotly map */}
+            {/* <div className="absolute inset-0 z-10">
+              <Plot
+                data={plotData}
+                layout={plotLayout}
+                config={plotConfig}
+                onClick={handleMapClick}
+                useResizeHandler
+                style={{ width: "100%", height: "100%" }}
+              />
+            </div> */}
 
-            {/* ─── HEAT MAP MODE ─── */}
-            {mapMode === "heat" && (
-              <div className="absolute inset-0 z-10">
-                <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
-                  <defs>
-                    <filter id="heat-blur">
-                      <feGaussianBlur stdDeviation="4" result="blur" />
-                    </filter>
-                    <radialGradient id="hg1" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="oklch(0.78 0.18 55)" stopOpacity="0.85"/>
-                      <stop offset="100%" stopColor="oklch(0.78 0.18 55)" stopOpacity="0"/>
-                    </radialGradient>
-                    <radialGradient id="hg2" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="oklch(0.65 0.2 265)" stopOpacity="0.75"/>
-                      <stop offset="100%" stopColor="oklch(0.65 0.2 265)" stopOpacity="0"/>
-                    </radialGradient>
-                  </defs>
-                  <g filter="url(#heat-blur)">
-                    {/* High intensity — Centro / Catedral */}
-                    <ellipse cx="50" cy="35" rx="14" ry="12" fill="url(#hg1)" />
-                    <ellipse cx="36" cy="50" rx="10" ry="9"  fill="url(#hg2)" />
-                    <ellipse cx="64" cy="44" rx="9"  ry="8"  fill="url(#hg2)" />
-                    <ellipse cx="66" cy="30" rx="8"  ry="7"  fill="url(#hg2)" />
-                    <ellipse cx="26" cy="22" rx="8"  ry="7"  fill="url(#hg2)" />
-                    <ellipse cx="52" cy="52" rx="10" ry="9"  fill="url(#hg2)" />
-                    <ellipse cx="44" cy="62" rx="8"  ry="7"  fill="url(#hg2)" />
-                    <ellipse cx="58" cy="56" rx="7"  ry="6"  fill="url(#hg2)" />
-                  </g>
-                  {/* Zone labels on heatmap */}
-                  {[
-                    { cx: 50, cy: 34, visitors: "12.4K", name: "Centro" },
-                    { cx: 36, cy: 50, visitors: "8.2K",  name: "Bolívar" },
-                    { cx: 64, cy: 44, visitors: "5.8K",  name: "El Emp." },
-                    { cx: 66, cy: 30, visitors: "3.1K",  name: "N.Norte" },
-                    { cx: 26, cy: 22, visitors: "6.7K",  name: "Tres Cruces" },
-                  ].map((z) => (
-                    <g key={z.name}>
-                      <circle cx={z.cx} cy={z.cy} r="5" fill="oklch(0.65 0.2 265)" opacity="0.85">
-                        <animate attributeName="r" values="5;6;5" dur="3s" repeatCount="indefinite"/>
-                        <animate attributeName="opacity" values="0.85;1;0.85" dur="3s" repeatCount="indefinite"/>
-                      </circle>
-                      <text x={z.cx} y={z.cy + 0.5} textAnchor="middle" dominantBaseline="middle" fontSize="2.5" fontWeight="700" fill="white">{z.visitors}</text>
-                    </g>
-                  ))}
-                </svg>
-                {/* Heatmap legend */}
-                <div className="absolute bottom-4 left-4 glass rounded-xl px-3 py-2 text-[10px] font-semibold text-muted-foreground border border-border/15 flex flex-col gap-1.5">
-                  <p className="font-bold text-foreground uppercase tracking-wider text-[9px]">Intensidad de visitas</p>
-                  <div className="flex items-center gap-1.5"><div className="size-2 rounded-full bg-gold"/><span>Alta (&gt;10K)</span></div>
-                  <div className="flex items-center gap-1.5"><div className="size-2 rounded-full bg-primary"/><span>Media (3K–10K)</span></div>
-                  <div className="flex items-center gap-1.5"><div className="size-2 rounded-full bg-primary/40"/><span>Baja (&lt;3K)</span></div>
+            {mapMode === "pins" && categoryZones.map((zone) => (
+              <button
+                key={zone.id}
+                onClick={() => setActiveCategory(zone.id)}
+                className="absolute z-20 rounded-xl px-3 py-2 text-center text-white shadow-md shadow-black/10 transition-all hover:shadow-lg hover:shadow-black/20"
+                style={{
+                  left: zone.x,
+                  top: zone.y,
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: activeCategory === zone.id ? "rgba(15, 23, 42, 0.45)" : "rgba(15, 23, 42, 0.15)",
+                  backdropFilter: "blur(12px)",
+                  border: activeCategory === zone.id ? "1.5px solid rgba(255, 255, 255, 0.3)" : "1px solid rgba(255, 255, 255, 0.05)",
+                }}
+              >
+                <p className="text-xs font-semibold leading-tight">{zone.label}</p>
+                <p className="text-[10px] font-bold text-gold/90 mt-0.5">{categoryTrustScores[zone.id] ?? 90}% Confianza</p>
+              </button>
+            ))}
+
+            {/* Mobile selected info overlay */}
+            {selectedPoint && nearestSelection && (
+              <div className="absolute bottom-4 left-4 right-4 z-20 lg:hidden glass rounded-2xl border border-white/10 p-4 text-sm text-foreground">
+                <div className="flex flex-col gap-3">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Sitio seleccionado</p>
+                    <p className="font-semibold">{selectedPoint.name}</p>
+                    <p className="text-[11px] text-muted-foreground">{categories.find((c) => c.id === selectedPoint.category)?.label}</p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Más cercano</p>
+                    <p className="font-semibold">{nearestSelection?.point.name}</p>
+                    <p className="text-[11px] text-muted-foreground">Aproximadamente {nearestSelection?.distanceKm} km</p>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* ─── CATEGORY ZONE BUBBLES ─── */}
-            {mapMode === "pins" && (
-              <>
-                {categoryBubbles.map((bubble) => {
-                  const Icon = bubble.icon
-                  const isActive = activeCategory === "all" || activeCategory === bubble.id
-                  return (
-                    <button
-                      key={bubble.id}
-                      onClick={() => setActiveCategory(bubble.id === activeCategory ? "all" : bubble.id)}
-                      style={{ left: bubble.x, top: bubble.y, transform: "translate(-50%, -50%)" }}
-                      className={cn(
-                        "absolute z-20 transition-all duration-300",
-                        !isActive && "opacity-30 scale-90"
-                      )}
-                    >
-                      <div
-                        className="flex items-center gap-2 rounded-full px-3.5 py-2.5 shadow-xl border border-white/20 backdrop-blur-sm text-white font-bold text-xs hover:scale-105 transition-transform"
-                        style={{ backgroundColor: bubble.color + "dd" }}
-                      >
-                        <Icon className="size-4" />
-                        <div className="text-left">
-                          <p className="leading-tight">{bubble.label}</p>
-                          <p className="text-[10px] font-semibold opacity-90">Confianza {bubble.trust}%</p>
-                        </div>
-                      </div>
-                    </button>
-                  )
-                })}
-
-                {/* Individual pins */}
-                {filtered.map((point) => {
-                  const Icon = getCategoryIcon(point.category)
-                  const color = getCategoryColor(point.category)
-                  const isSelected = selectedPoint?.id === point.id
-                  return (
-                    <button
-                      key={point.id}
-                      onClick={() => setSelectedPoint(isSelected ? null : point)}
-                      style={{ left: `${point.x}%`, top: `${point.y}%` }}
-                      className="absolute -translate-x-1/2 -translate-y-1/2 z-30 group"
-                      aria-label={`Ver ${point.name}`}
-                    >
-                      <div
-                        className={cn(
-                          "size-8 rounded-full flex items-center justify-center shadow-lg border-2 border-white/30 transition-all duration-200 group-hover:scale-125",
-                          isSelected && "scale-125 ring-4 ring-white/40"
-                        )}
-                        style={{ backgroundColor: color }}
-                      >
-                        <Icon className="size-3.5 text-white" />
-                      </div>
-                      {/* Tooltip */}
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-40">
-                        <div className="glass rounded-xl px-3 py-1.5 shadow-xl border border-border/20 whitespace-nowrap">
-                          <p className="text-xs font-bold text-foreground">{point.name}</p>
-                          <p className="text-[10px] text-gold font-semibold">⭐ {point.rating} · Confianza {point.trust}/100</p>
-                        </div>
-                      </div>
-                    </button>
-                  )
-                })}
-              </>
-            )}
-
-            {/* City center label */}
-            <div
-              className="absolute z-10 pointer-events-none text-white font-heading font-bold text-3xl opacity-40"
-              style={{ left: "50%", top: "45%", transform: "translate(-50%,-50%)" }}
-            >
-              Popayán
-            </div>
-
-            {/* Map footer info */}
             <div className="absolute bottom-3 right-3 z-20 glass rounded-xl px-3 py-1.5 border border-border/15 text-[9px] text-muted-foreground font-medium">
               Popayán, Cauca · Colombia · {filtered.length} lugares
             </div>
@@ -596,46 +927,52 @@ export default function MapaPage() {
             <div className="flex-1 overflow-y-auto">
               <div className="p-4 pb-2">
                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                  Experiencias reales cerca de ti
+                  {activeCategory === "all" 
+                    ? "Más cercanos y populares" 
+                    : `${categories.find((c) => c.id === activeCategory)?.label}`}
                 </p>
-                <button className="text-[10px] text-primary font-semibold hover:underline float-right -mt-4">
-                  Ver todas
-                </button>
               </div>
               <div className="flex flex-col gap-1 px-2 pb-4">
-                {nearbyExperiences.map((exp) => (
-                  <Link
-                    key={exp.id}
-                    href={`/lugar/${exp.id}`}
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-secondary/50 transition-colors group"
-                  >
-                    <div className="relative size-14 rounded-xl overflow-hidden shrink-0 border border-border/10">
-                      <Image src={exp.image} alt={exp.name} fill className="object-cover" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-foreground group-hover:text-primary transition-colors leading-tight line-clamp-2">
-                        {exp.name}
-                      </p>
-                      <p className="text-[10px] text-primary/80 font-semibold mt-0.5">
-                        ● {exp.category}
-                      </p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className="flex items-center gap-0.5 text-[10px] text-gold font-bold">
-                          <Star className="size-2.5" fill="currentColor" />
-                          {exp.rating}
-                        </div>
-                        <span className="text-[10px] text-muted-foreground">({exp.reviews})</span>
-                        <span className="text-[10px] text-muted-foreground ml-auto">A {exp.distance}</span>
+                {displayedExperiences.map((exp) => {
+                  const Icon = getCategoryIcon(exp.category)
+                  const color = getCategoryColor(exp.category)
+                  return (
+                    <button
+                      key={exp.id}
+                      onClick={() => setSelectedPoint(exp)}
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-secondary/50 transition-colors group text-left w-full"
+                    >
+                      <div className="relative size-12 rounded-lg overflow-hidden shrink-0 border border-border/10">
+                        <Image src={exp.image} alt={exp.name} fill className="object-cover" />
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-foreground group-hover:text-primary transition-colors leading-tight line-clamp-2">
+                          {exp.name}
+                        </p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <Icon className="size-3" style={{ color }} />
+                          <p className="text-[10px] text-muted-foreground font-medium">
+                            {categories.find((c) => c.id === exp.category)?.label}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className="flex items-center gap-0.5 text-[10px] text-gold font-bold">
+                            <Star className="size-2" fill="currentColor" />
+                            {exp.rating}
+                          </div>
+                          <span className="text-[10px] text-muted-foreground ml-auto">{exp.distance}</span>
+                        </div>
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
 
               {/* All map points list */}
+              {activeCategory !== "all" && (
               <div className="border-t border-border/10 px-2 pb-4 pt-3">
                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-2 mb-2">
-                  Todos los lugares ({filtered.length})
+                  Más lugares en esta categoría ({filtered.length})
                 </p>
                 {filtered.map((point) => {
                   const Icon = getCategoryIcon(point.category)
@@ -661,6 +998,7 @@ export default function MapaPage() {
                   )
                 })}
               </div>
+              )}
             </div>
           </aside>
         )}
@@ -744,6 +1082,53 @@ export default function MapaPage() {
                   </span>
                 ))}
               </div>
+
+              {/* Similar experiences in this category */}
+              {similarExperiences.length > 0 && (
+                <div className="rounded-2xl bg-slate-950/40 border border-primary/15 p-4">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3 font-semibold">Experiencias similares en esta categoría</p>
+                  <div className="flex flex-col gap-2">
+                    {similarExperiences.map((exp) => {
+                      const Icon = getCategoryIcon(exp.category)
+                      const color = getCategoryColor(exp.category)
+                      return (
+                        <button
+                          key={exp.id}
+                          onClick={() => setSelectedPoint(exp)}
+                          className="text-left p-2 rounded-lg hover:bg-slate-950/60 transition-colors group"
+                        >
+                          <div className="flex items-start gap-2">
+                            <div className="size-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: color + "22" }}>
+                              <Icon className="size-3" style={{ color }} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                                {exp.name}
+                              </p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className="text-[9px] bg-slate-800 text-gold font-bold px-1.5 py-0.5 rounded">{exp.trust}% Confianza</span>
+                                <span className="text-[9px] text-muted-foreground">{exp.distance}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {nearestSelection && (
+                <div className="rounded-3xl bg-slate-950/80 border border-primary/20 p-4 text-sm text-foreground">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Punto más cercano</p>
+                  <div className="space-y-2">
+                    <p className="font-semibold">{nearestSelection?.point.name}</p>
+                    <p className="text-[11px] text-muted-foreground">Categoría: {categories.find((c) => c.id === nearestSelection?.point.category)?.label}</p>
+                    <p className="text-[11px] text-muted-foreground">Distancia aproximada: {nearestSelection?.distanceKm} km</p>
+                    <p className="text-[11px] text-muted-foreground">Coordenadas: {nearestSelection?.point.x}%, {nearestSelection?.point.y}%</p>
+                  </div>
+                </div>
+              )}
 
               <div className="flex flex-col gap-2 mt-auto pt-2 border-t border-border/10">
                 <button
