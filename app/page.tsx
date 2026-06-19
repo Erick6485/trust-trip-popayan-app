@@ -45,7 +45,7 @@ export default function HomePage() {
               ))}
             </nav>
             <p className="text-xs text-muted-foreground">
-              © 2024 Travesía Blanca. Hecho con IA en Colombia.
+              © 2024 Travesía Blanca.
             </p>
           </div>
         </div>

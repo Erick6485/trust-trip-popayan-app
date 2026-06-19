@@ -24,18 +24,25 @@ import {
   Moon,
   Download,
   Share2,
+  BookOpen,
+  Coffee,
+  Leaf,
+  Church,
+  Palette,
+  Music,
+  Mountain,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const interests = [
-  { id: "historia", label: "Historia & Patrimonio", icon: "🏛️" },
-  { id: "gastronomia", label: "Gastronomía", icon: "🍽️" },
-  { id: "naturaleza", label: "Naturaleza", icon: "🌿" },
-  { id: "religioso", label: "Turismo Religioso", icon: "⛪" },
-  { id: "artesanias", label: "Artesanías", icon: "🎨" },
-  { id: "cultura", label: "Cultura & Arte", icon: "🎭" },
-  { id: "aventura", label: "Aventura", icon: "🏔️" },
-  { id: "fotografia", label: "Fotografía", icon: "📷" },
+  { id: "historia", label: "Historia & Patrimonio", icon: BookOpen },
+  { id: "gastronomia", label: "Gastronomía", icon: Coffee },
+  { id: "naturaleza", label: "Naturaleza", icon: Leaf },
+  { id: "religioso", label: "Turismo Religioso", icon: Church },
+  { id: "artesanias", label: "Artesanías", icon: Palette },
+  { id: "cultura", label: "Cultura & Arte", icon: Music },
+  { id: "aventura", label: "Aventura", icon: Mountain },
+  { id: "fotografia", label: "Fotografía", icon: Camera },
 ]
 
 const travelTypes = [
@@ -133,7 +140,16 @@ export default function RutasPage() {
     <div className="relative min-h-dvh bg-background">
       <Navigation />
 
-      <div className="max-w-4xl mx-auto px-4 pb-28 pt-16 md:pb-12 md:pt-24 py-8">
+      <div className="max-w-6xl mx-auto px-4 pb-28 pt-16 md:pb-12 md:pt-24 py-8 relative">
+        <svg width="0" height="0" className="absolute">
+          <defs>
+            <linearGradient id="gold-gradient-interest" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#D4AF37" />
+              <stop offset="50%" stopColor="#F7C948" />
+              <stop offset="100%" stopColor="#E7BB3D" />
+            </linearGradient>
+          </defs>
+        </svg>
         {/* Header */}
         <div className="text-center mb-10">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/30 bg-gold/10 px-2.5 py-0.5 text-xs font-semibold text-gold uppercase tracking-wide mb-4 animate-float-slow">
@@ -314,7 +330,7 @@ export default function RutasPage() {
                         : "border-border/10 hover:border-primary/40 bg-secondary/50 text-muted-foreground hover:text-foreground"
                     )}
                   >
-                    <span className="text-2xl">{interest.icon}</span>
+                    <interest.icon className="size-6" stroke="url(#gold-gradient-interest)" />
                     <span
                       className={cn(
                         "text-xs font-semibold text-center leading-tight",
@@ -430,11 +446,11 @@ export default function RutasPage() {
               ))}
             </div>
 
-            {/* Day detail & Route map grid */}
+            {/* Day detail & Route map grid - Layout mejorado */}
             {currentItinerary && (
-              <div className="grid md:grid-cols-3 gap-6">
-                {/* Left — Day Detail */}
-                <div className="md:col-span-2">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                {/* Left — Day Detail - Ocupa 3 columnas */}
+                <div className="lg:col-span-3">
                   <Card className="rounded-2xl glass p-1 transition-all duration-300 hover:border-primary/40 h-full">
                     <CardHeader className="p-5 pb-4">
                       <div className="flex items-center justify-between">
@@ -503,8 +519,8 @@ export default function RutasPage() {
                   </Card>
                 </div>
 
-                {/* Right — Route Mini-map */}
-                <div className="md:col-span-1">
+                {/* Right — Route Mini-map - Ocupa 2 columnas (más grande) */}
+                <div className="lg:col-span-2">
                   <Card className="rounded-2xl glass p-1 transition-all duration-300 hover:border-primary/40 h-full flex flex-col">
                     <CardHeader className="p-5 pb-3">
                       <CardTitle className="text-sm font-bold text-foreground flex items-center gap-2">
@@ -513,18 +529,20 @@ export default function RutasPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="p-5 pt-0 flex-1 flex flex-col justify-between gap-4">
-                      {/* Interactive map container */}
-                      <div className="relative w-full h-[260px] rounded-xl overflow-hidden border border-border/10 bg-secondary/20 shrink-0">
-                        {/* Map Image Background */}
-                        <div className="absolute inset-0">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src="/images/mapa-popayan.png"
-                            alt="Mapa de Popayán"
-                            className="w-full h-full object-cover opacity-30"
-                          />
-                        </div>
-                        {/* Aurora overlay */}
+                      {/* Interactive map container - Más grande */}
+                      <div className="relative w-full h-[340px] rounded-xl overflow-hidden border border-border/10 bg-secondary/20 shrink-0">
+                        {/* OpenStreetMap iframe */}
+                        <iframe
+                          src={`https://www.openstreetmap.org/export/embed.html?bbox=-76.6168%2C2.4310%2C-76.5768%2C2.4710&layer=mapnik&marker=${2.4510}%2C${-76.5968}`}
+                          className="w-full h-full border-0"
+                          loading="lazy"
+                          title="Mapa de Popayán"
+                        />
+                        
+                        {/* Overlay con gradiente para mejor visibilidad de los pins */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+                        
+                        {/* Aurora overlay sutil */}
                         <div className="absolute inset-0 bg-primary/5 mix-blend-overlay pointer-events-none" />
 
                         {/* SVG Itinerary Route Path */}
@@ -533,71 +551,144 @@ export default function RutasPage() {
                             <path
                               d="M 48 44 L 50 38 L 40 43 L 44 52"
                               fill="none"
-                              stroke="var(--primary)"
+                              stroke="#D4AF37"
                               strokeWidth="2.5"
                               strokeDasharray="5 3"
-                              className="animate-dash-flow text-primary"
+                              className="animate-dash-flow"
+                              style={{ stroke: "#D4AF37" }}
                             />
                           )}
                           {activeDay === 1 && (
                             <path
                               d="M 35 28 L 65 40 L 55 48"
                               fill="none"
-                              stroke="var(--primary)"
+                              stroke="#D4AF37"
                               strokeWidth="2.5"
                               strokeDasharray="5 3"
-                              className="animate-dash-flow text-primary"
+                              className="animate-dash-flow"
+                              style={{ stroke: "#D4AF37" }}
                             />
                           )}
                           {activeDay === 2 && (
                             <path
                               d="M 48 44 L 80 70 L 70 80"
                               fill="none"
-                              stroke="var(--primary)"
+                              stroke="#D4AF37"
                               strokeWidth="2.5"
                               strokeDasharray="5 3"
-                              className="animate-dash-flow text-primary"
+                              className="animate-dash-flow"
+                              style={{ stroke: "#D4AF37" }}
                             />
                           )}
                         </svg>
 
-                        {/* Itinerary pin markers */}
+                        {/* Itinerary pin markers con mejor estilo */}
                         {activeDay === 0 && (
                           <>
-                            {/* Pin 1: Parque Caldas */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "48%", top: "44%", transform: "translate(-50%, -50%)" }}>1</div>
-                            {/* Pin 2: Catedral */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "50%", top: "38%", transform: "translate(-50%, -50%)" }}>2</div>
-                            {/* Pin 3: Puente Humilladero */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "40%", top: "43%", transform: "translate(-50%, -50%)" }}>3</div>
-                            {/* Pin 4: Serrano */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "44%", top: "52%", transform: "translate(-50%, -50%)" }}>4</div>
+                            <div className="absolute z-20" style={{ left: "48%", top: "44%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  1
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute z-20" style={{ left: "50%", top: "38%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  2
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute z-20" style={{ left: "40%", top: "43%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  3
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute z-20" style={{ left: "44%", top: "52%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  4
+                                </div>
+                              </div>
+                            </div>
                           </>
                         )}
                         {activeDay === 1 && (
                           <>
-                            {/* Pin 1: Cerro Tres Cruces */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "35%", top: "28%", transform: "translate(-50%, -50%)" }}>1</div>
-                            {/* Pin 2: Ermita de Belen */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "65%", top: "40%", transform: "translate(-50%, -50%)" }}>2</div>
-                            {/* Pin 3: Café Balcon del Cauca */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "55%", top: "48%", transform: "translate(-50%, -50%)" }}>3</div>
+                            <div className="absolute z-20" style={{ left: "35%", top: "28%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  1
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute z-20" style={{ left: "65%", top: "40%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  2
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute z-20" style={{ left: "55%", top: "48%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  3
+                                </div>
+                              </div>
+                            </div>
                           </>
                         )}
                         {activeDay === 2 && (
                           <>
-                            {/* Pin 1: Salida Popayán */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "48%", top: "44%", transform: "translate(-50%, -50%)" }}>1</div>
-                            {/* Pin 2: Volcan Purace */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "80%", top: "70%", transform: "translate(-50%, -50%)" }}>2</div>
-                            {/* Pin 3: Cascada Bedon */}
-                            <div className="absolute size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border border-border" style={{ left: "70%", top: "80%", transform: "translate(-50%, -50%)" }}>3</div>
+                            <div className="absolute z-20" style={{ left: "48%", top: "44%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  1
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute z-20" style={{ left: "80%", top: "70%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  2
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute z-20" style={{ left: "70%", top: "80%", transform: "translate(-50%, -50%)" }}>
+                              <div className="relative flex items-center justify-center">
+                                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
+                                <div className="relative size-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg border-2 border-white/50">
+                                  3
+                                </div>
+                              </div>
+                            </div>
                           </>
                         )}
+
+                        {/* Attribution */}
+                        <div className="absolute bottom-1.5 left-1.5 z-30">
+                          <span className="text-[8px] text-white/70 bg-black/40 px-2 py-0.5 rounded font-medium backdrop-blur-sm">
+                            © OpenStreetMap contributors
+                          </span>
+                        </div>
                       </div>
 
                       <div className="text-[11px] text-muted-foreground leading-relaxed text-pretty mt-2">
-                        Esta ruta conecta secuencialmente las actividades recomendadas para el **Día {currentItinerary.day}**. Haz clic abajo para explorar el mapa interactivo.
+                        Esta ruta conecta secuencialmente las actividades recomendadas para el **Día {currentItinerary.day}**. 
+                        <span className="block text-[10px] text-primary/70 font-semibold mt-1">
+                          📍 {currentItinerary.activities.length + currentItinerary.afternoon.length} paradas en el recorrido
+                        </span>
                       </div>
                     </CardContent>
                   </Card>
